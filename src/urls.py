@@ -8,6 +8,8 @@ from publications.views import PublicationViewSet
 from patients.views import PatientViewSet
 from nutritionists.views import ProductViewSet
 from users.views import UserViewSet
+from appointments.urls import ScheduleViewSet
+
 from rest_framework_simplejwt.views import (
     TokenRefreshView,
     TokenVerifyView,
@@ -26,7 +28,7 @@ router.register('api/products', ProductViewSet, basename='products')
 router.register('api/users', UserViewSet, basename='users')
 router.register('api/workshop', WorkshopViewSet, basename='workshops')
 router.register('api/publications', PublicationViewSet, basename='publications')
-
+router.register('schedule', ScheduleViewSet, basename='schedule')
 urlpatterns = [
     path('admin/', admin.site.urls),
 
