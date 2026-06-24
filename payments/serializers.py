@@ -27,9 +27,20 @@ class PaymentSerializer(serializers.ModelSerializer):
 
 
 class CartItemSerializer(serializers.ModelSerializer):
+    product_name = serializers.CharField(source='product.name', read_only=True, default=None)
+    package_name = serializers.CharField(source='package.name', read_only=True, default=None)
+    unit_price = serializers.SerializerMethodField()
+
     class Meta:
         model = CartItem
-        fields = ['cart_item_id', 'product', 'package', 'appointment', 'quantity']
+        fields = ['cart_item_id', 'product', 'product_name', 'package', 'package_name', 'appointment', 'quantity', 'unit_price']
+
+    def get_unit_price(self, obj):
+        if obj.product:
+            return str(obj.product.price)
+        if obj.package:
+            return str(obj.package.price)
+        return None
 
 
 class CartSerializer(serializers.ModelSerializer):
@@ -66,9 +77,21 @@ class UpdateCartItemSerializer(serializers.Serializer):
 
 
 class OrderItemSerializer(serializers.ModelSerializer):
+    product_name = serializers.CharField(source='product.name', read_only=True, default=None)
+    package_name = serializers.CharField(source='package.name', read_only=True, default=None)
+    appointment_date = serializers.DateField(source='appointment.date', read_only=True, default=None)
+    appointment_time = serializers.TimeField(source='appointment.time', read_only=True, default=None)
+    appointment_status = serializers.CharField(source='appointment.status', read_only=True, default=None)
+
     class Meta:
         model = OrderItem
-        fields = ['order_item_id', 'product', 'package', 'appointment', 'quantity', 'price']
+        fields = [
+            'order_item_id',
+            'product', 'product_name',
+            'package', 'package_name',
+            'appointment', 'appointment_date', 'appointment_time', 'appointment_status',
+            'quantity', 'price',
+        ]
 
 
 class OrderSerializer(serializers.ModelSerializer):
@@ -76,7 +99,7 @@ class OrderSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Order
-        fields = ['order_id', 'items', 'total_price', 'status', 'created_at']
+        fields = ['order_id', 'patient', 'items', 'total_price', 'status', 'created_at', 'updated_at']
 
 
 class OrderListSerializer(serializers.ModelSerializer):
@@ -84,8 +107,8 @@ class OrderListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Order
-        fields = ['order_id', 'items', 'total_price', 'status', 'created_at']
-        read_only_fields = ['order_id', 'total_price', 'status', 'created_at']
+        fields = ['order_id', 'patient', 'items', 'total_price', 'status', 'created_at', 'updated_at']
+        read_only_fields = ['order_id', 'patient', 'total_price', 'status', 'created_at', 'updated_at']
 
 
 class PaymentTransactionSerializer(serializers.ModelSerializer):
