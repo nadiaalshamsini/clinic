@@ -5,5 +5,5 @@ from .models import Inquiry
 class InquirySerializer(serializers.ModelSerializer):
     class Meta:
         model = Inquiry
-        fields = ['id', 'name', 'email', 'phone', 'message', 'created_at']
+        fields = ['id', 'name', 'email', 'subject', 'message', 'created_at']
         read_only_fields = ['id', 'created_at']

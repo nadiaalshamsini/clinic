@@ -8,7 +8,7 @@ from utils.permissions import IsPatientUser
 from django.db.models import Count
 
 from .models import Package, Workshop, PatientWorkshop
-from .serializers import PackageSerializer, WorkshopListSerializer
+from .serializers import PackageSerializer, WorkshopListSerializer, WorkshopSerializer
 from utils.pagination import StandardPagination
 
 class PackageViewSet(ModelViewSet):
@@ -59,8 +59,10 @@ class PackageViewSet(ModelViewSet):
 
 
 class WorkshopViewSet(viewsets.ReadOnlyModelViewSet):
-    serializer_class = WorkshopListSerializer
     pagination_class = StandardPagination
+
+    def get_serializer_class(self):
+        return WorkshopSerializer
 
     def get_queryset(self):
         return Workshop.objects.filter(
@@ -95,7 +97,7 @@ class WorkshopViewSet(viewsets.ReadOnlyModelViewSet):
                 {'error': 'Already registered for this workshop'},
                 status=status.HTTP_400_BAD_REQUEST
             )
-   
+
         PatientWorkshop.objects.create(patient=patient, workshop=workshop)
         return Response(
             {'message': 'Successfully registered for the workshop'},
