@@ -13,4 +13,4 @@ class PatientViewSet(ModelViewSet):
     def profile(self, request, pk=None):
         patient = self.get_object()
         serializer = PatientDetailSerializer(patient)
-        return Response(serializer.data)
+        return Response(serializer.data) 
