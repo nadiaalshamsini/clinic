@@ -53,3 +53,7 @@ class ScheduleSerializer(serializers.ModelSerializer):
 class AvailableSlotSerializer(serializers.Serializer):
     start_time = serializers.TimeField()
     end_time = serializers.TimeField()
+class AppointmentCreateSerializer(serializers.ModelSerializer):  
+    class Meta:
+        model = Appointment
+        fields = ['patient', 'date', 'time', 'type', 'notes', 'start_time', 'end_time']
