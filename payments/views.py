@@ -28,7 +28,7 @@ class CartView(APIView):
 
 class AddToCartView(APIView):
     permission_classes = [IsPatientUser]
-
+    serializer_class = AddToCartSerializer
     def post(self, request):
         serializer = AddToCartSerializer(data=request.data)
         if not serializer.is_valid():
@@ -83,7 +83,7 @@ class AddToCartView(APIView):
 
 class UpdateCartItemView(APIView):
     permission_classes = [IsPatientUser]
-
+    serializer_class = UpdateCartItemSerializer
     def patch(self, request, item_id):
         patient = request.user.patient_profile
         try:
@@ -170,7 +170,7 @@ class CheckoutView(APIView):
 
 class OrderListView(APIView):
     permission_classes = [IsPatientUser]
-
+    serialzier_class = OrderListSerializer
     def get(self, request):
         patient = request.user.patient_profile
         orders = Order.objects.filter(patient=patient).order_by('-created_at')

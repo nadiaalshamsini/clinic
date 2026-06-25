@@ -13,6 +13,7 @@ from .serializers import (
     ScheduleSerializer,
     AppointmentBookSerializer,
     AppointmentDetailSerializer,
+    AppointmentBookSerializer
 )
 
 
@@ -92,7 +93,7 @@ class AvailableSlotsView(APIView):
 
 class BookAppointmentView(APIView):
     permission_classes = [IsPatientUser]
-
+    serializer_class = AppointmentBookSerializer
     def post(self, request):
         serializer = AppointmentBookSerializer(data=request.data)
         if not serializer.is_valid():
