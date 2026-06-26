@@ -71,19 +71,20 @@ class UserViewSet(viewsets.ModelViewSet):
             otp_code = user.generate_otp()
             
             try:
-                send_mail(
-                    subject='رمز استعادة كلمة المرور',
-                    message=f'رمز الاستعادة الخاص بك: {otp_code}\nصلاحيته: 10 دقائق',
-                    from_email=settings.DEFAULT_FROM_EMAIL,
-                    recipient_list=[user.email],
-                    fail_silently=False,
-                )
+              send_mail(
+                subject='رمز استعادة كلمة المرور',
+                message=f'رمز الاستعادة الخاص بك: {otp_code}\nصلاحيته: 10 دقائق',
+                from_email=settings.DEFAULT_FROM_EMAIL,
+                recipient_list=[user.email],
+                fail_silently=False,
+    )
             except Exception as e:
-                print(f"خطأ في إرسال البريد: {e}")
-            
-            return Response({
-                'message': 'تم إرسال رمز الاستعادة إلى بريدك الالكتروني'
-            }, status=status.HTTP_200_OK)
+              return Response(
+                {'error': f'فشل إرسال البريد: {str(e)}'},
+          status=status.HTTP_500_INTERNAL_SERVER_ERROR
+    )
+
+            return Response({'message': 'تم إرسال رمز الاستعادة إلى بريدك الالكتروني'}, status=200)
         
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     

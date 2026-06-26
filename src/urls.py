@@ -29,6 +29,7 @@ router.register('api/workshop', WorkshopViewSet, basename='workshops')
 router.register('api/publications', PublicationViewSet, basename='publications')
 router.register('api/contact', ContactViewSet, basename='contacts')
 
+router.register('schedule', ScheduleViewSet, basename='schedule')
 urlpatterns = [
     path('admin/', admin.site.urls),
 

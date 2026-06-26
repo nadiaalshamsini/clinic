@@ -60,9 +60,10 @@ class User(AbstractUser):
     
     def verify_otp(self, otp_code):
         """التحقق من صحة الرمز والوقت"""
+        if not self.otp or not self.otp_created_at: 
+           return False
         if self.otp != otp_code:
-            return False
-        
+           return False
         # تحقق من انتهاء صلاحية الرمز (10 دقائق)
         if timezone.now() - self.otp_created_at > timedelta(minutes=10):
             return False
