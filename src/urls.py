@@ -19,7 +19,7 @@ from drf_spectacular.views import (SpectacularAPIView,
                                    SpectacularRedocView,
                                    SpectacularSwaggerView)
 from appointments.views import ScheduleViewSet
-
+from dashboard.views import HomeViewSet
 router = DefaultRouter()
 router.register('api/packages', PackageViewSet, basename='packages')
 router.register('api/patients', PatientViewSet, basename='patients')
@@ -28,7 +28,7 @@ router.register('api/users', UserViewSet, basename='users')
 router.register('api/workshop', WorkshopViewSet, basename='workshops')
 router.register('api/publications', PublicationViewSet, basename='publications')
 router.register('api/contact', ContactViewSet, basename='contacts')
-
+router.register('api/home', HomeViewSet, basename="home")
 router.register('api/schedule', ScheduleViewSet, basename='schedule')
 urlpatterns = [
     path('admin/', admin.site.urls),
