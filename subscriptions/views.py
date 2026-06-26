@@ -6,16 +6,14 @@ from rest_framework import viewsets, status
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from utils.permissions import IsPatientUser
 from django.db.models import Count
-from utils.permissions import IsNutritionistUser
 
 from .models import Package, Workshop, PatientWorkshop
-from .serializers import PackageSerializer, WorkshopListSerializer
+from .serializers import PackageSerializer, WorkshopListSerializer, WorkshopSerializer
 from utils.pagination import StandardPagination
 
 class PackageViewSet(ModelViewSet):
     queryset = Package.objects.all().order_by('-created_at')
     serializer_class = PackageSerializer
-    permission_classes = [IsNutritionistUser]
     pagination_class = PageNumberPagination
     pagination_class.page_size = 10
     @action(detail=False, methods=['get'])
@@ -61,8 +59,10 @@ class PackageViewSet(ModelViewSet):
 
 
 class WorkshopViewSet(viewsets.ReadOnlyModelViewSet):
-    serializer_class = WorkshopListSerializer
     pagination_class = StandardPagination
+
+    def get_serializer_class(self):
+        return WorkshopSerializer
 
     def get_queryset(self):
         return Workshop.objects.filter(
@@ -85,6 +85,12 @@ class WorkshopViewSet(viewsets.ReadOnlyModelViewSet):
             )
 
         patient = request.user.patient_profile
+
+        if workshop.is_full:
+            return Response(
+                {'error': 'Workshop is full'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
 
         if PatientWorkshop.objects.filter(patient=patient, workshop=workshop).exists():
             return Response(
