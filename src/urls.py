@@ -18,7 +18,7 @@ from rest_framework_simplejwt.views import (
 from drf_spectacular.views import (SpectacularAPIView,
                                    SpectacularRedocView,
                                    SpectacularSwaggerView)
-
+from appointments.views import ScheduleViewSet
 
 router = DefaultRouter()
 router.register('api/packages', PackageViewSet, basename='packages')
@@ -29,7 +29,7 @@ router.register('api/workshop', WorkshopViewSet, basename='workshops')
 router.register('api/publications', PublicationViewSet, basename='publications')
 router.register('api/contact', ContactViewSet, basename='contacts')
 
-router.register('schedule', ScheduleViewSet, basename='schedule')
+router.register('api/schedule', ScheduleViewSet, basename='schedule')
 urlpatterns = [
     path('admin/', admin.site.urls),
 
