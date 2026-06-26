@@ -43,31 +43,31 @@ def notify_new_inquiry(sender, instance, created, **kwargs):
 
 LOW_STOCK_THRESHOLD = 5 
 
-@receiver(post_save, sender=Product)
-def notify_low_stock(sender, instance, **kwargs):
-    if instance.stock <= LOW_STOCK_THRESHOLD:
-        nutritionist = Nutritionist.objects.first()  # بما إنه في أخصائي واحد بالنظام
-        if not nutritionist:
-            return
+# @receiver(post_save, sender=Product)
+# def notify_low_stock(sender, instance, **kwargs):
+#     if instance.stock <= LOW_STOCK_THRESHOLD:
+#         nutritionist = Nutritionist.objects.first()  # بما إنه في أخصائي واحد بالنظام
+#         if not nutritionist:
+#             return
         
-        # تحقق إنه ما في إشعار غير مقروء لنفس المنتج
-        already_notified = Notification.objects.filter(
-            nutritionist=nutritionist,
-            title=f'تنبيه: مخزون منخفض - {instance.name}',
-            status='unread'
-        ).exists()
+#         # تحقق إنه ما في إشعار غير مقروء لنفس المنتج
+#         already_notified = Notification.objects.filter(
+#             nutritionist=nutritionist,
+#             title=f'تنبيه: مخزون منخفض - {instance.name}',
+#             status='unread'
+#         ).exists()
         
-        if not already_notified:
-            Notification.objects.create(
-                nutritionist=nutritionist,
-                title=f'تنبيه: مخزون منخفض - {instance.name}',
-                info=f'الكمية المتبقية من {instance.name} وصلت إلى {instance.stock} وحدات فقط.',
-            )
+#         if not already_notified:
+#             Notification.objects.create(
+#                 nutritionist=nutritionist,
+#                 title=f'تنبيه: مخزون منخفض - {instance.name}',
+#                 info=f'الكمية المتبقية من {instance.name} وصلت إلى {instance.stock} وحدات فقط.',
+#             )
 
-APPOINTMENT_TYPE_AR = {
-    'online': 'أونلاين',
-    'in-person': 'حضوري',
-}
+# APPOINTMENT_TYPE_AR = {
+#     'online': 'أونلاين',
+#     'in-person': 'حضوري',
+# }
 
 @receiver(post_save, sender=Appointment)
 def create_appointment_notification(sender, instance, created, **kwargs):
